@@ -1,0 +1,4 @@
+ln: invalid option -- 'a'
+Try 'ln --help' for more information.
+ * Restarting nginx nginx
+   ...fail!

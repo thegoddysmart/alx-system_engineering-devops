@@ -1,36 +1,37 @@
 #!/usr/bin/python3
 """
-This is a script to print hot posts on a given Reddit subreddit.
+Script that queries the Reddit API and prints the titles of the first 10 hot posts listed for a given subreddit.
 """
 
 import requests
 
 def top_ten(subreddit):
-    """Print the titles of the 10 hottest posts on a given subreddit."""
-    url = f"https://www.reddit.com/r/{subreddit}/hot.json"
-    headers = {"User-Agent": "Mozilla/5.0"}
-    params = {"limit": 10}
+    """Print the titles of the first 10 hot posts listed for a given subreddit."""
+    # Reddit API endpoint for hot posts in a subreddit
+    url = f"https://www.reddit.com/r/{subreddit}/hot.json?limit=10"
+    
+    # Reddit API credentials
+    client_id = "ML7Se32I89MYsuGtpfNQfw"
+    client_secret = "SfMV3qA_Tz1PSHiZBhcxge4TfknjPg"
+    
+    # Set up the headers with a custom User-Agent
+    headers = {"User-Agent": "Reddit Top Ten Posts Printer"}
+    
     try:
-        response = requests.get(url, headers=headers, params=params, allow_redirects=False)
+        # Make a GET request to the Reddit API
+        response = requests.get(url, headers=headers, auth=(client_id, client_secret))
+        
+        # Check if the request was successful (status code 200)
         if response.status_code == 200:
-            try:
-                data = response.json()
-                posts = data.get('data', {}).get('children', [])
-                if not posts:
-                    print(f"No hot posts found in subreddit '{subreddit}'.")
-                    return
-                for post in posts:
-                    print(post['data']['title'])
-            except ValueError:
-                print(f"Failed to parse JSON response for subreddit '{subreddit}'.")
-        elif response.status_code == 404:
-            print(f"Subreddit '{subreddit}' not found.")
+            # Parse the JSON response
+            data = response.json()
+            # Extract the titles of the first 10 hot posts
+            for post in data['data']['children']:
+                print(post['data']['title'])
         else:
-            print(f"Error: Received status code {response.status_code}")
+            # If the subreddit is invalid or another error occurs, print None
+            print(None)
     except requests.RequestException as e:
-        print(f"Request Exception: {e}")
-
-# Uncomment the following lines for testing locally
-# top_ten('programming')
-# top_ten('this_is_a_fake_subreddit')
+        print(f"Error: {e}")
+        print(None)
 

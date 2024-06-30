@@ -1,38 +1,26 @@
 #!/usr/bin/python3
-
 """
-prints the titles of the first 10 hot posts listed for a given subreddit
+get the top ten hot topics of a subreddit
 """
-
-from requests import get
+import requests
 
 
 def top_ten(subreddit):
     """
-    get the 10 hot posts listed for a given subreddit
+    get the top ten hot topics of a subreddit
     """
-
     client_id = "ML7Se32I89MYsuGtpfNQfw"
     client_secret = "SfMV3qA_Tz1PSHiZBhcxge4TfknjPg"
 
-    if subreddit is None or not isinstance(subreddit, str):
-        print("None")
+    results = requests.get(
+        f"https://www.reddit.com/r/{subreddit}/hot.json?limit=10",
+        headers={"User-Agent": "Reddit Top Ten Posts"},
+        auth=(client_id, client_secret))
 
-    user_agent = {'User-agent': 'Reddit Top Ten Posts'}
-    params = {'limit': 10}
-    url = 'https://www.reddit.com/r/{}/hot/.json'.format(subreddit)
-
-    response = get(url,
-            headers=user_agent,
-            auth=(client_id, client_secret),
-            params=params)
-    results = response.json()
-
-    try:
-        my_data = results.get('data').get('children')
-
-        for i in my_data:
-            print(i.get('data').get('title'))
-
-    except Exception:
-        print("None")
+    if results.status_code == 200:
+        response_data = results.json()
+        titles = response_data['data']['children']
+        for title in titles:
+            print(title['data']['title'])
+    else:
+        print(None)

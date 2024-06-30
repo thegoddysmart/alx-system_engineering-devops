@@ -13,9 +13,6 @@ def number_of_subscribers(subreddit):
 
     headers = {"User-Agent": "Reddit Subscribers Counter"}
 
-    if subreddit is None or not isinstance(subreddit, str):
-        return 0
-
     try:
         response = requests.get(url, headers=headers, allow_redirects=False)
 

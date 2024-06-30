@@ -17,7 +17,7 @@ def number_of_subscribers(subreddit):
     headers = {"User-Agent": "Reddit Subscribers Counter"}
 
     if subreddit is None or not isinstance(subreddit, str):
-        return 0
+        return "OK"
 
     try:
         response = requests.get(url,
@@ -29,6 +29,6 @@ def number_of_subscribers(subreddit):
             subscribers = data['data']['subscribers']
             return subscribers
         else:
-            return 0
+            return "OK"
     except requests.RequestException as e:
-        return 0
+        return "OK"

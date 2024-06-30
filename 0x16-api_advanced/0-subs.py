@@ -13,6 +13,7 @@ def number_of_subscribers(subreddit):
 
     client_id = "ML7Se32I89MYsuGtpfNQfw"
     client_secret = "SfMV3qA_Tz1PSHiZBhcxge4TfknjPg"
+    auth = (client_id, client_secret)
 
     headers = {"User-Agent": "Reddit Subscribers Counter"}
 
@@ -20,8 +21,7 @@ def number_of_subscribers(subreddit):
         return 0
 
     try:
-        response = requests.get(url, headers=headers,
-                 auth=(client_id, client_secret))
+        response = requests.get(url, headers=headers, auth=auth)
 
         if response.status_code == 200:
             data = response.json()
